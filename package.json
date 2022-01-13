@@ -3,10 +3,24 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "electron .",
+    "dist:linux": "electron-builder --linux",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "start:desktop": "concurrently \"ng build --delete-output-path=false --watch\" \"webpack --config webpack.dev.config.ts --watch\"",
+    "build:electron": "ng build && webpack --config webpack.prod.config.js",
+    "package": "electron-packager dist/my-editor -overwrite --out=dist -asar --platform=linux -prune=true"
+  },
+  "build": {
+    "linux": {
+      "target": [
+        "deb",
+        "snap",
+        "rpm"
+      ],
+      "category": "Utility"
+    }
   },
   "private": true,
   "dependencies": {
@@ -18,6 +32,7 @@
     "@angular/platform-browser": "~13.0.0",
     "@angular/platform-browser-dynamic": "~13.0.0",
     "@angular/router": "~13.0.0",
+    "ngx-wig": "^11.0.0",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -27,13 +42,18 @@
     "@angular/cli": "~13.0.4",
     "@angular/compiler-cli": "~13.0.0",
     "@types/jasmine": "~3.10.0",
-    "@types/node": "^12.11.1",
+    "@types/node": "^15.6.0",
+    "concurrently": "^6.1.0",
+    "electron": "^12.0.9",
+    "electron-packager": "^15.2.0",
     "jasmine-core": "~3.10.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
-    "typescript": "~4.4.3"
+    "ts-loader": "^9.2.6",
+    "typescript": "~4.4.3",
+    "webpack-cli": "^4.9.1"
   }
 }
